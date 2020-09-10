@@ -64,5 +64,13 @@ describe('short-url routes', () => {
 
     expect(updateUrl.body).toEqual({ id: expect.any(String), userUrl: 'yahoo.com', generatedUrl: expect.any(String) });
 
-  }); 
+  });
+
+  it.only('should delete a url by userUrl', async() => {
+    const google = await Url.insert({ userUrl: 'google.com' });
+    const deleteUrl = await request(app)
+      .delete(`/urls/${google.id}`);
+    
+    expect(deleteUrl.body).toEqual({ id: google.id, userUrl: 'google.com', generatedUrl: expect.any(String) });
+  });
 });
