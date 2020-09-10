@@ -52,4 +52,17 @@ describe('short-url routes', () => {
 
     expect(google.user_url).toEqual('google.com');
   });
+
+  it('should change userUrl by id', async() => {
+    const google = await Url.insert({ userUrl: 'google.com' });
+    const updateUrl = await request(app)
+      .put('/urls/')
+      .send({
+        googleId: google.id,
+        user_url: { userUrl:'yahoo.com' }
+      });
+
+    expect(updateUrl.body).toEqual({ id: expect.any(String), userUrl: 'yahoo.com', generatedUrl: expect.any(String) });
+
+  }); 
 });
