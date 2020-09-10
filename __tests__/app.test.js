@@ -17,7 +17,6 @@ describe('short-url routes', () => {
         userUrl: 'google.com'
       });
     expect(response.body).toEqual({ id: expect.any(String), user_url: 'google.com', generated_url: expect.any(String) });
-
   });
 
   it('should get a url by userUrl', async() => {
@@ -46,5 +45,15 @@ describe('short-url routes', () => {
       { id: expect.any(String), user_url: 'yahoo.com', generated_url: expect.any(String) },
       { id: expect.any(String), user_url: 'msn.com', generated_url: expect.any(String) }
     ]));
+  });
+
+  it('should redirect the user to a the users url', async() => {
+    const google = await Url.insert({ userUrl: 'google.com' });
+
+    const response = await request(app)
+      .get(`/api/urls/${google.generated_url}`);
+
+    console.log(response);
+    expect(response.body).toEqual('google.com');
   });
 });
