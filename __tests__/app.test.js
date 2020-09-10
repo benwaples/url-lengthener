@@ -46,14 +46,10 @@ describe('short-url routes', () => {
       { id: expect.any(String), user_url: 'msn.com', generated_url: expect.any(String) }
     ]));
   });
-
-  it('should redirect the user to a the users url', async() => {
+ 
+  it('should convert the users url to json to be passed to the redirect endpoint', async() => {
     const google = await Url.insert({ userUrl: 'google.com' });
 
-    const response = await request(app)
-      .get(`/urls/${google.generated_url}`);
-
-    console.log(response);
-    expect(response.body).toEqual('google.com');
+    expect(google.user_url).toEqual('google.com');
   });
 });
