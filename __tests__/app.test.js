@@ -12,7 +12,7 @@ describe('short-url routes', () => {
   });
   it('should create a new url via post', async() => {
     const response = await request(app)
-      .post('/api/urls')
+      .post('/urls')
       .send({
         userUrl: 'google.com'
       });
@@ -22,12 +22,12 @@ describe('short-url routes', () => {
   it('should get a url by userUrl', async() => {
     const makeUrl = await request(app)
   
-      .post('/api/urls')
+      .post('/urls')
       .send({
         userUrl: 'google.com'
       });
     const response = await request(app)
-      .get(`/api/urls/${makeUrl.body.user_url}`);
+      .get(`/urls/${makeUrl.body.user_url}`);
     expect(response.body).toEqual({ id: expect.any(String), user_url: 'google.com', generated_url: expect.any(String) });
   });
 
@@ -39,7 +39,7 @@ describe('short-url routes', () => {
     ]);
 
     const response = await request(app)
-      .get('/api/urls');
+      .get('/urls');
     expect(response.body).toEqual(expect.arrayContaining([
       { id: expect.any(String), user_url: 'google.com', generated_url: expect.any(String) },
       { id: expect.any(String), user_url: 'yahoo.com', generated_url: expect.any(String) },
@@ -51,7 +51,7 @@ describe('short-url routes', () => {
     const google = await Url.insert({ userUrl: 'google.com' });
 
     const response = await request(app)
-      .get(`/api/urls/${google.generated_url}`);
+      .get(`/urls/${google.generated_url}`);
 
     console.log(response);
     expect(response.body).toEqual('google.com');
